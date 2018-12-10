@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import propTypes from "prop-types";
-import Loading from "components/loading";
 import splits from "./splits";
 import ReactLoadable from "react-loadable";
 import { observer } from "mobx-react";
+import Loading from "components/loading";
 
 let
   container_ensure_src_cache,
