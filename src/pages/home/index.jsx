@@ -1,56 +1,78 @@
 import React, { Component } from "react";
 import "./index.less";
-import { offsetX, offsetY, color, size } from "utils/random";
+import { randomNumber, randomColor } from "utils/random";
 
 class Ball {
-  constructor(x, y, velX, velY, color, size) {
+  constructor(x, y, vX, vY, color, radius) {
     this.x = x;
     this.y = y;
-    this.velX = velX;
-    this.velY = velY;
+    this.vX = vX;
+    this.vY = vY;
     this.color = color;
-    this.size = size;
+    this.radius = radius;
   }
 
-  draw = (ctx, oX, oY, bg, sz) => {
+  draw = (ctx) => {
     ctx.beginPath();
-    ctx.arc(oX, oY, sz, 0, 2 * Math.PI, true);
+    ctx.fillStyle = this.color;
+    ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
     ctx.strokeStyle = "transparent";
-    ctx.fillStyle = bg;
     ctx.fill();
     ctx.stroke();
   }
+
+  move = (screenWidth, screenHeight) => {
+    this.x += this.vX;
+    this.y += this.vY;
+
+    if ((this.x + this.radius) >= screenWidth || (this.x - this.radius) <= 0) {
+      this.vX = -(this.vX);
+    }
+
+    if ((this.y + this.radius) >= screenHeight || (this.y - this.radius) <= 0) {
+      this.vY = -(this.vY);
+    }
+  }
+
+  collision = () => {
+
+  }
 }
 
-class Home extends Component {
+class Page extends Component {
+  drawScreen = (ctx, screenWidth, screenHeight) => {
+    ctx.fillStyle = "rgba(0, 0, 0, .25)";
+    ctx.fillRect(0, 0, screenWidth, screenHeight);
+  }
+
   componentDidMount() {
     const
       canvas = document.querySelector("canvas"),
       ctx = canvas.getContext("2d"),
-      width = canvas.width = window.innerWidth,
-      height = canvas.height = window.innerHeight;
-    let balls = [];
+      screenWidth = canvas.width = window.innerWidth,
+      screenHeight = canvas.height = window.innerHeight,
+      balls = [];
 
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, width, height);
+    for (let i = 0; i < 5; i++) {
+      const ball = new Ball(
+        randomNumber(0, screenWidth),
+        randomNumber(0, screenHeight),
+        randomNumber(-10, 10),
+        randomNumber(-10, 10),
+        randomColor(),
+        randomNumber(20, 40)
+      );
 
-    for (let i = 0; i < 25; i++) {
-      const
-        oX = offsetX(width),
-        oY = offsetY(height),
-        bg = color(),
-        sz = size(10, 30);
+      balls.push(ball);
 
-      ctx.width = width;
-      ctx.height = height;
-
-      let a = new Ball(oX, oY, 4, 4, bg, sz);
-      balls.push(a);
-      
-      balls[i].draw(ctx, oX, oY, bg, sz);
+      setInterval(() => {
+        this.drawScreen(ctx, screenWidth, screenHeight);
+        balls[i].draw(ctx);
+        balls[i].move(screenWidth, screenHeight);
+      }, 5);
     }
-
   }
+
   render() {
     return (
       <canvas />
@@ -58,4 +80,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default Page;
