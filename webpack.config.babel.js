@@ -163,7 +163,7 @@ module.exports = {
       template: "./assets/index.html",
       inject: "body",
       minify: false,
-      title: "支付宝"
+      title: "Marbles"
     })
   ]
 };

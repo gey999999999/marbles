@@ -1,11 +1,9 @@
 const
-  offsetX = (x) => x * Math.random(),
-  offsetY = (y) => y * Math.random(),
-  color = () => {
-    const 
-      random = () => Math.floor(Math.random()*255);
-    return `rgb(${random()},${random()},${random()})`;
+  random = (min, max) => {
+    return Math.floor(Math.random() * (max - min)) + min;
   },
-  size = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+  randomColor = () => {
+    return `rgb(${random(0, 255)},${random(0, 255)},${random(0, 255)})`;
+  };
 
-export { offsetX, offsetY, color, size };
+export { random, randomColor };
