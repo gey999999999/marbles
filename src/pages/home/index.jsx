@@ -38,22 +38,18 @@ class Ball {
 
   }
 }
-
-class Page extends Component {
-  drawScreen = (ctx, screenWidth, screenHeight) => {
-    ctx.fillStyle = "rgba(0, 0, 0, .25)";
-    ctx.fillRect(0, 0, screenWidth, screenHeight);
-  }
-
-  componentDidMount() {
+const
+  balls = [],
+  loop = (() => {
     const
       canvas = document.querySelector("canvas"),
       ctx = canvas.getContext("2d"),
       screenWidth = canvas.width = window.innerWidth,
-      screenHeight = canvas.height = window.innerHeight,
-      balls = [];
+      screenHeight = canvas.height = window.innerHeight;
 
-    for (let i = 0; i < 5; i++) {
+    ctx.fillStyle = "rgba(0, 0, 0, .25)";
+    ctx.fillRect(0, 0, screenWidth, screenHeight);
+    for (let i = 0; balls.length < 25; i++) {
       const ball = new Ball(
         randomNumber(0, screenWidth),
         randomNumber(0, screenHeight),
@@ -64,13 +60,26 @@ class Page extends Component {
       );
 
       balls.push(ball);
-
-      setInterval(() => {
-        this.drawScreen(ctx, screenWidth, screenHeight);
-        balls[i].draw(ctx);
-        balls[i].move(screenWidth, screenHeight);
-      }, 5);
     }
+    for (let i = 0; i < balls.length; i++) {
+      balls[i].draw(ctx);
+      balls[i].move(screenWidth, screenHeight);
+    }
+
+    requestAnimationFrame(loop);
+
+
+    // 
+  });
+
+class Page extends Component {
+  constructor() {
+    super();
+  }
+
+
+  componentDidMount() {
+    loop();
   }
 
   render() {
